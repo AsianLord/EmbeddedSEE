@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sliding On/Off Switch</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            border-radius: 8px;
+            background-color: #fff;
+        }
+
+        .navbar {
+            overflow: hidden;
+            background-color: #333;
+            margin-bottom: 20px;
+        }
+
+        .navbar a {
+            float: left;
+            display: block;
+            color: #f2f2f2;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+        }
+
+        .navbar a:hover {
+            background-color: #ddd;
+            color: black;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        h3 {
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .switch-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .switch-label {
+            font-size: 24px;
+            margin-right: 10px;
+            color: #333;
+        }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: #2196F3;
+        }
+
+        input:focus + .slider {
+            box-shadow: 0 0 1px #2196F3;
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+
+        /* Rounded sliders */
+        .slider.round {
+            border-radius: 34px;
+        }
+
+        .slider.round:before {
+            border-radius: 50%;
+        }
+
+        .redirect-button-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .redirect-button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .redirect-button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+<div class="navbar">
+    <a href="/">Home</a>
+    <a href="/alarms">Alarms</a>
+    <a href="/user-details">User Details</a>
+    <a href="/about">About</a>
+</div>
+
+<div class="container">
+
+    <h1>Security Mode</h1>
+    <br>
+    <h2>Step 1</h2>
+    <h3>Setting up Pushbullet</h3>
+    <p>Go to pushbullet.com and create an account. Download the app on your phone and login with the same account. Enable notifications from the pushbullet app.</p>
+    <br><br>
+    <h2>Step 2</h2>
+    <h3>Getting your Authentication Code</h3>
+    <p>Open up Pushbullet after logging in. Under Settings => Account => Access Token, there will be Create Access Token button. Click on it and copy the code. Follow the authentication button below and paste the code into the text field. If you have already put in the right authentication code and just want to check if you are receiving alerts click on the check alert button</p>
+    <br>
+    <div class="redirect-button-container">
+        <button class="redirect-button" onclick="redirectToAuth()">Go to Authentication</button>
+    </div>
+
+    <div class="redirect-button-container">
+        <button class="redirect-button" onclick="redirectToMessageTest()">Check Alert</button>
+    </div>
+
+    <br><br><br>
+
+    <h2>Step 3</h2>
+    <h3>Activating Security Mode</h3>
+    <p> The button below activates security mode. It notifies you on your phone's app if there is motion being detected in your room from unwanted visitors. </p>
+    <div class="switch-container">
+        <span class="switch-label">Security Mode</span>
+        <label class="switch">
+            <input id="security-switch" type="checkbox" onchange="sendSecurityMode()">
+            <span class="slider round"></span>
+        </label>
+    </div>
+</div>
+
+<script>
+    function sendSecurityMode() {
+        var xhr = new XMLHttpRequest();
+        var isChecked = document.getElementById("security-switch").checked;
+        
+        // Define the request parameters
+        xhr.open("POST", "/beta-features", true); // Assuming '/update-security-mode' is the route to handle the actions
+        
+        // Set the content type header
+        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+        
+        // Handle response from the server
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                // Optionally, handle the response from the server
+                console.log(xhr.responseText); // Log the response to the console
+            }
+        };
+        
+        // Send the request with the action as a parameter
+        xhr.send("security_mode=" + isChecked);
+    }
+
+    function redirectToAuth() {
+        window.location.href = '/beta-features/auth';
+    }
+
+    function redirectToMessageTest() {
+        window.location.href = '/beta-features/auth/confirmed';
+    }
+</script>
+
+</body>
+</html>

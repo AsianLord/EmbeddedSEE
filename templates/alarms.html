@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Active Alarms</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            margin: 0;
+            padding: 0;
+        }
+
+        .navbar {
+            overflow: hidden;
+            background-color: #333;
+        }
+
+        .navbar a {
+            float: left;
+            display: block;
+            color: #f2f2f2;
+            text-align: center;
+            padding: 14px 20px;
+            text-decoration: none;
+        }
+
+        .navbar a:hover {
+            background-color: #ddd;
+            color: black;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        td button {
+            padding: 6px 12px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        td button:hover {
+            background-color: #45a049;
+        }
+
+        p {
+            text-align: center;
+        }
+
+        .add-alarm-btn {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .add-alarm-btn button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .add-alarm-btn button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+<div class="navbar">
+    <a href="/">Home</a>
+    <a href="/alarms">Alarms</a>
+    <a href="/user-details">User Details</a>
+    <a href="/about">About</a>
+</div>
+
+<h2>Active Alarms</h2>
+
+{% if my_alarms %}
+<table>
+    <thead>
+        <tr>
+            <th>Alarm ID</th>
+            <th>Alarm Type</th>
+            <th>Time</th>
+            <th>Frequency</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for alarm in my_alarms %}
+        {% if alarm.status %}
+        <tr>
+            <td>{{ loop.index }}</td>
+            <td>{{ alarm.alarm_type }}</td>
+            <td>{{ alarm.time }}</td>
+            <td>{{ alarm.frequency }}</td>
+            <td><button onclick="disableAlarm('{{loop.index}}')">Disable</button></td>
+        </tr>
+        {% endif %}
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p>No active alarms.</p>
+{% endif %}
+
+<div class="add-alarm-btn">
+    <button onclick="redirectToAddAlarm()">Add Alarm</button>
+</div>
+
+<!-- Script content goes here -->
+
+<script>
+    function disableAlarm(alarmId) {
+
+
+
+        var xhr = new XMLHttpRequest();
+        
+            // Define the request parameters
+            xhr.open("POST", "/alarms", true); // Assuming '/control' is the route to handle the actions
+        
+            // Set the content type header
+            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+        
+            // Handle response from the server
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    // Optionally, handle the response from the server
+                    console.log(xhr.responseText); // Log the response to the console
+                }
+            };
+        
+            // Send the request with the action as a parameter
+            xhr.send("alarm_id=" + alarmId);
+
+
+    }
+
+    function redirectToAddAlarm() {
+        window.location.href = '/add-alarm';
+    }
+</script>
+
+</body>
+</html>

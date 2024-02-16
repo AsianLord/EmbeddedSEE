@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Switch Control</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0; /* Initial background color */
+            margin: 0;
+            padding: 0;
+            display: flex; /* Use flexbox for vertical centering */
+            flex-direction: column; /* Stack items vertically */
+            align-items: center; /* Center vertically */
+            min-height: 100vh; /* Set minimum height to full viewport height */
+        }
+
+        .navbar {
+            background-color: #333; /* Menu bar background color */
+            width: 100%; /* Make menu bar full width */
+            display: flex;
+        }
+
+        .navbar a {
+            float: left;
+            display: block;
+            color: #f2f2f2;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+        }
+
+        .navbar a:hover {
+            background-color: #ddd;
+            color: black;
+        }
+
+        .button-container {
+            text-align: center;
+            margin-top: 20px; /* Adjust margin */
+        }
+
+        button {
+            justify-content: center; /* Center items vertically */
+            display: block;
+            margin: 10px auto; /* Center horizontally */
+            padding: 10px 20px;
+            background-color: #333; /* Initial button background color */
+            color: #f0f0f0; /* Initial button text color */
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s, color 0.3s; /* Smooth transitions for button color changes */
+        }
+
+        button:hover {
+            background-color: #111; /* Darker shade on hover */
+        }
+
+        .switch-container {
+            margin-top: 20px; /* Adjust margin */
+            text-align: center;
+        }
+
+        .switch-label {
+            margin-bottom: 10px;
+            color: #333;
+            font-weight: bold;
+            font-size: 18px; /* Adjust font size */
+        }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: #2196F3;
+        }
+
+        input:focus + .slider {
+            box-shadow: 0 0 1px #2196F3;
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+
+        /* Rounded sliders */
+        .slider.round {
+            border-radius: 34px;
+        }
+
+        .slider.round:before {
+            border-radius: 50%;
+        }
+    </style>
+    <script>
+        function sendAction(action) {
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "/", true);
+            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    console.log(xhr.responseText);
+                }
+            };
+            xhr.send("action=" + action);
+            // Additional action handling logic can be added here
+        }
+
+        function sendSecurityMode(element) {
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "/", true);
+            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    console.log(xhr.responseText);
+                }
+            };
+            xhr.send("security=" + element.checked);
+            // Additional security mode handling logic can be added here
+        }
+    </script>
+</head>
+<body>
+
+<nav class="navbar">
+    <a href="/">Home</a>
+    <a href="/alarms">Alarms</a>
+    <a href="/user-details">User Details</a>
+    <a href="/about">About</a>
+</nav>
+
+<h1>Switch Control</h1>
+
+<div class="button-container">
+    <!-- Button to turn on -->
+    <button onclick="sendAction('on')">On</button> <!-- Changed to just "On" -->
+
+    <!-- Button to turn off -->
+    <button onclick="sendAction('off')">Off</button> <!-- Changed to just "Off" -->
+</div>
+
+<div class="switch-container">
+    <div class="switch-label">Security Mode</div>
+    <label class="switch">
+        <input type="checkbox" onchange="sendSecurityMode(this)">
+        <span class="slider round"></span>
+    </label>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Switch Control</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0; /* Initial background color */
+            margin: 0;
+            padding: 0;
+            display: flex; /* Use flexbox for vertical centering */
+            flex-direction: column; /* Stack items vertically */
+            align-items: center; /* Center vertically */
+            min-height: 100vh; /* Set minimum height to full viewport height */
+        }
+
+	.navbar 
+	{
+            background-color: #333;
+            overflow: hidden;
+            background-color: #333; /* Menu bar background color */
+            width: 100%; /* Make menu bar full width */
+            display: flex;
+            
+        }
+
+        .navbar a {
+            float: left;
+            display: block;
+            color: #f2f2f2;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+        }
+
+        .navbar a:hover {
+            background-color: #ddd;
+            color: black;
+        }
+        
+        
+        form {
+            width: 400px;
+            margin: 20px auto;
+            padding: 20px;
+            border-radius: 8px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #333; /* Text color */
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        .button-container {
+            text-align: center;
+        }
+
+        button {
+            justify-content: center; /* Center items vertically */
+            display: block;
+            margin: 10px auto; /* Center horizontally */
+            padding: 10px 20px;
+            background-color: #333; /* Initial button background color */
+            color: #f0f0f0; /* Initial button text color */
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s, color 0.3s; /* Smooth transitions for button color changes */
+        }
+
+        button:hover {
+            background-color: #111; /* Darker shade on hover */
+        }
+    </style>
+    <script>
+        function sendAction(action) {
+            var xhr = new XMLHttpRequest();
+        
+            // Define the request parameters
+            xhr.open("POST", "/", true); // Assuming '/control' is the route to handle the actions
+        
+            // Set the content type header
+            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+        
+            // Handle response from the server
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    // Optionally, handle the response from the server
+                    console.log(xhr.responseText); // Log the response to the console
+                }
+            };
+        
+            // Send the request with the action as a parameter
+            xhr.send("action=" + action);
+        
+            var body = document.body;
+            var buttons = document.querySelectorAll('button');
+            var h1 = document.querySelector('h1');
+            if (action === 'on') {
+                body.style.backgroundColor = '#f0f0f0'; // Change background color to light grey
+                h1.style.color = '#333'; // Change text color to dark grey
+                buttons.forEach(function(button) {
+                    button.style.backgroundColor = '#333'; // Change button background color to dark grey
+                    button.style.color = '#f0f0f0'; // Change button text color to light grey
+                });
+            } else if (action === 'off') {
+                body.style.backgroundColor = '#333'; // Change background color to dark grey
+                h1.style.color = '#f0f0f0'; // Change text color to light grey
+                buttons.forEach(function(button) {
+                    button.style.backgroundColor = '#f0f0f0'; // Change button background color to light grey
+                    button.style.color = '#333'; // Change button text color to dark grey
+                });
+            }
+            // Additional action handling logic can be added here
+        }
+        
+        function redirecttobeta() {
+        window.location.href = '/beta-features';
+    }
+    </script>
+</head>
+<body>
+
+<nav class="navbar">
+    <a href="/">Home</a>
+    <a href="/alarms">Alarms</a>
+    <a href="/user-details">User Details</a>
+    <a href="/about">About</a>
+</nav>
+
+<h1>Switch Control</h1>
+
+<div class="button-container">
+    <!-- Button to turn on -->
+    <button onclick="sendAction('on')">On</button> <!-- Changed to just "On" -->
+
+    <!-- Button to turn off -->
+    <button onclick="sendAction('off')">Off</button> <!-- Changed to just "Off" -->
+</div>
+
+<h1>Beta Features: Security Mode</h1>
+<div class="button-container">
+    <!-- Button to turn off -->
+    <button onclick="redirecttobeta()">Test it out</button> <!-- Changed to just "Off" -->
+</div>
+
+</body>
+</html>
